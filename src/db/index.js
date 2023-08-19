@@ -1,3 +1,3 @@
 export * from "./schema/User";
-export * from "./schema/post";
-export * from "./schema/comment";
+export * from "./schema/Post";
+export * from "./schema/Comment";
