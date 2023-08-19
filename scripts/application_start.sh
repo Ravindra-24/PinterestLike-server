@@ -1,6 +1,6 @@
-sudo chmod -R 777 /home/ec2-user/pinterest_like
+sudo chmod -R 777 /home/ec2-user/PinterestLike-server
 
-cd /home/ec2-user/pinterest_like
+cd /home/ec2-user/PinterestLike-server
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
