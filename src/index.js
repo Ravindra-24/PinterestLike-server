@@ -73,5 +73,5 @@ app.get('/', (req, res) =>{
 // });
 
 app.listen(PORT, () => {
-    logger.info(`Server is listening on port ${PORT}`)
+    logger.info(`Server version 1.0`)
 })
