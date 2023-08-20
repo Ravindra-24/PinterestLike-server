@@ -26,7 +26,7 @@ app.use('/post', postRoutes)
 app.use('/comment', commentRoutes)
 
 app.get('/', (req, res) =>{
-    res.send(`Server is running on port ${PORT} `)
+    res.send(`Server is running  `)
 })
 
 // app.get("/seed-db", async (req, res) => {
