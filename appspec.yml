@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /home/ec2-user/pinterest_like
+    destination: /home/ec2-user/PinterestLike-server
 hooks:
   Applicationstop:
     - location: scripts/application_stop.sh
