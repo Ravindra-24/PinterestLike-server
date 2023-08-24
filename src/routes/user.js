@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getUser, getUserPosts } from "../controllers/user";
+import { followUser, getUser, getUserPosts } from "../controllers/user";
 import { authMiddleware } from "../middleware";
 
 const router = Router();
@@ -7,5 +7,7 @@ const router = Router();
 router.get("/:id", getUser )
 
 router.get("/user-posts/:id", getUserPosts)
+
+router.patch("/follow/:userId", authMiddleware, followUser )
 
 export default router;

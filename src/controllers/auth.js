@@ -90,6 +90,7 @@ export const login = async (req, res) => {
           initials: user.initials,
           role: user.role,
         },
+        profilePicture: user.profilePicture,
       },
     });
   } catch (error) {
@@ -196,10 +197,11 @@ export const validate = async (req, res) => {
         data: null,
       });
     }
+    const users = await User.findById({ _id: payload.id });
     return res.status(200).json({
       message: "User Verified",
       success: true,
-      data: { token, user: payload },
+      data: { token, user: payload, profilePicture: users.profilePicture },
     });
   } catch (error) {
     logger.error(error);
