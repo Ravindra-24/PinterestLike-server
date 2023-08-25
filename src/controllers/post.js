@@ -2,6 +2,8 @@ import { Post, Comment, User } from "../db";
 import logger from "../logger";
 import { validationResult } from "express-validator";
 import axios from "axios";
+import cloudinary from '../utils/cloudinary'
+import streamifier from 'streamifier'
 
 export const getPosts = async (req, res) => {
   try {
@@ -100,23 +102,32 @@ export const createPost = async (req, res) => {
     } = req;
     const { title, description } = req.body;
     const file = req.file;
-    const responseURL = await axios.post(
-      `https://api.upload.io/v2/accounts/${process.env.UPLOAD_IO_ACCOUNT_ID}/uploads/binary`,
-      file.buffer,
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.UPLOAD_IO_API_KEY}`,
-        },
-      }
-    );
-    // console.log(responseURL);
+    const responseURL = await new Promise((resolve, reject) => {
+      cloudinary.uploader.upload_stream({ folder: 'posts' }, (error, result) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(result);
+        }
+      }).end(file.buffer);
+    });
+   
+    // const responseURL = await axios.post(
+    //   `https://api.upload.io/v2/accounts/${process.env.UPLOAD_IO_ACCOUNT_ID}/uploads/binary`,
+    //   file.buffer,
+    //   {
+    //     headers: {
+    //       Authorization: `Bearer ${process.env.UPLOAD_IO_API_KEY}`,
+    //     },
+    //   }
+    // );
     const post = await Post.create({
       title,
       description,
-      image: responseURL.data.fileUrl,
+      image: responseURL.secure_url,
       user: id,
     });
-    return res.status(200).json({
+    return  res.status(200).json({
       message: "Post created successfully",
       success: true,
       data: post,
