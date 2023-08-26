@@ -2,6 +2,7 @@ import { verifyAuthToken } from "../utils/token";
 
 export const authMiddleware = (req, res, next) => {
   try {
+    // if (!req.headers.authorization) return next();
     const token = req.headers.authorization.split(" ")[1];
     // console.log(token);
     const payload = verifyAuthToken(token);
