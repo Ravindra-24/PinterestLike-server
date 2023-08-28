@@ -1,5 +1,6 @@
 import { Post, User } from "../db";
 import logger from "../logger";
+import  cloudinary  from "../utils/cloudinary";
 
 export const getUser = async (req, res) => {
   try {
@@ -56,9 +57,11 @@ export const followUser = async (req, res) => {
     }
     const currentUser = await User.findById(id);
 
-    //find user followers array
+    //find user followers array, if current user id is present then remove it else add it
     const index = user.followers.findIndex((item) => item == id);
-    const currentUserIndex = currentUser.following.findIndex((id)=> id == userId);
+    const currentUserIndex = currentUser.following.findIndex(
+      (id) => id == userId
+    );
     if (index == -1 && currentUserIndex == -1) {
       user.followers.push(id);
       currentUser.following.push(userId);
@@ -66,19 +69,44 @@ export const followUser = async (req, res) => {
       user.followers.splice(index, 1);
       currentUser.following.splice(currentUserIndex, 1);
     }
-    //find current user following array
-    // const currentUserIndex = currentUser.following.findIndex(
-    //   (id) => id == userId
-    // );
-    // if(currentUserIndex == -1){
-    //   currentUser.following.push(userId);
-    // }else{
-    //   currentUser.following.splice(currentUserIndex, 1);
-    // }
 
     await user.save();
     await currentUser.save();
     return res.status(200).json({ message: "sucess", success: true });
+  } catch (error) {
+    return res.status(500).json({ error: error.message, success: false });
+  }
+};
+
+export const updateUser = async (req, res) => {
+  try {
+    const {
+      user: { id },
+    } = req;
+    const { firstName, lastName, bio, phone } = req.body;
+    const file = req.file;
+    const responseURL = await new Promise((resolve, reject) => {
+      cloudinary.uploader
+        .upload_stream({ folder: "users" }, (error, result) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(result);
+          }
+        })
+        .end(file.buffer);
+    });
+    const profilePicture = responseURL.secure_url;
+    await User.findByIdAndUpdate(id, {
+      ...(firstName && { firstName }),
+      ...(lastName && { lastName }),
+      ...(bio && { bio }),
+      ...(phone && { phone }),
+      ...(profilePicture && { profilePicture }),
+    });
+    return res
+      .status(200)
+      .json({ message: "Profile Updated Successfully", success: true });
   } catch (error) {
     return res.status(500).json({ error: error.message, success: false });
   }
