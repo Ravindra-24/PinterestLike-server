@@ -2,7 +2,7 @@ import dotenv from 'dotenv'
 dotenv.config()
 import express from 'express'
 import cors from 'cors'
-import logger,{morganMiddleware} from './logger'
+import logger,{morganMiddleware} from './logger/index'
 import cookieParser from 'cookie-parser'
 import authRoutes from './routes/auth'
 import postRoutes from './routes/post'
