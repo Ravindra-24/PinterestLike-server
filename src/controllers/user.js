@@ -83,8 +83,11 @@ export const updateUser = async (req, res) => {
     const {
       user: { id },
     } = req;
-    const { firstName, lastName, bio, phone } = req.body;
+    
     const file = req.file;
+    let profilePicture = null
+    const { firstName, lastName, bio, phone } = req.body;
+    if(file){
     const responseURL = await new Promise((resolve, reject) => {
       cloudinary.uploader
         .upload_stream({ folder: "users" }, (error, result) => {
@@ -96,7 +99,9 @@ export const updateUser = async (req, res) => {
         })
         .end(file.buffer);
     });
-    const profilePicture = responseURL.secure_url;
+     profilePicture = responseURL.secure_url;
+  }
+    
     await User.findByIdAndUpdate(id, {
       ...(firstName && { firstName }),
       ...(lastName && { lastName }),
