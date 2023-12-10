@@ -74,6 +74,8 @@ export const login = async (req, res) => {
     const token = generateToken({
       id: user._id,
       email: user.email,
+      profilePicture: user.profilePicture,
+      firstName: user.firstName,
       fullName: user.fullName,
       initials: user.initials,
       role: user.role,
@@ -86,11 +88,12 @@ export const login = async (req, res) => {
         user: {
           id: user._id,
           email: user.email,
+          profilePicture: user.profilePicture,
+          firstName: user.firstName,
           fullName: user.fullName,
           initials: user.initials,
           role: user.role,
         },
-        profilePicture: user.profilePicture,
       },
     });
   } catch (error) {
@@ -201,7 +204,7 @@ export const validate = async (req, res) => {
     return res.status(200).json({
       message: "User Verified",
       success: true,
-      data: { token, user: payload, profilePicture: users.profilePicture },
+      data: { token, user: payload },
     });
   } catch (error) {
     logger.error(error);
