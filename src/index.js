@@ -12,6 +12,7 @@ import { connectDB } from './utils/db.utils'
 import cloudinary from './utils/cloudinary'
 import FormData from "form-data";
 import axios from 'axios'
+import { Post } from './db'
 
 
 const app = express()

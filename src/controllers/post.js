@@ -250,3 +250,20 @@ export const deletePost = async (req, res) => {
     });
   }
 };
+
+
+export const getSlideShowImages = async (req, res) => {
+  try {
+    const images = await Post.find().sort({likes: -1}).limit(6);
+    return res.status(200).json({
+      data: images,
+      success: true,
+    });
+  } catch (error) {
+    logger.error(error);
+    return res.status(500).json({
+      error: error.message,
+      success: false,
+    });
+    };
+}

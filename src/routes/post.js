@@ -7,6 +7,7 @@ import {
   deletePost,
   updatePost,
   updatePostLikes,
+  getSlideShowImages,
 } from "../controllers/post.js";
 import { body } from "express-validator";
 import upload from "../utils/uploader.js";
@@ -14,6 +15,8 @@ import upload from "../utils/uploader.js";
 const router = Router();
 
 router.get("/", getPosts);
+
+router.get("/slide-show-images", getSlideShowImages);
 
 router.get("/:id", getPost);
 
@@ -32,5 +35,6 @@ router.post("/:id", authMiddleware, deletePost);
 router.patch("/update/:id", authMiddleware, updatePost);
 
 router.patch("/like/:postId", authMiddleware, updatePostLikes);
+
 
 export default router;
