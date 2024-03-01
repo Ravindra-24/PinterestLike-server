@@ -7,7 +7,133 @@ import {
   generateToken,
   verifyAuthToken,
 } from "../utils/token";
+import jwt from "jsonwebtoken";
 const { validationResult } = require("express-validator");
+
+import axios from "axios";
+
+export const oneTapLogin = async (req, res) => {
+  try {
+    const { CredentialResponse } = req.body;
+    const { credential } = CredentialResponse;
+    const userData = jwt.decode(credential);
+    const {
+      email,
+      given_name: firstName,
+      family_name: lastName,
+      picture: profilePicture,
+      jti: password,
+    } = userData;
+    let user = await User.findOne({ email });
+    if (!user) {
+      user = await User.create({
+        email,
+        firstName,
+        lastName,
+        profilePicture,
+        password,
+      });
+    }
+    let loginUser = await User.findOne({ email });
+    const token = generateToken({
+      id: loginUser._id,
+      email: loginUser.email,
+      profilePicture: loginUser.profilePicture,
+      firstName: loginUser.firstName,
+      fullName: loginUser.fullName,
+      initials: loginUser.initials,
+      role: loginUser.role,
+    });
+    return res.status(201).json({
+      message: "Login successfull",
+      success: true,
+      data: {
+        token,
+        user: {
+          id: loginUser._id,
+          email: loginUser.email,
+          profilePicture: loginUser.profilePicture,
+          firstName: loginUser.firstName,
+          fullName: loginUser.fullName,
+          initials: loginUser.initials,
+          role: loginUser.role,
+        },
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const googleLogin = async (req, res) => {
+  try {
+    const { codeResponse } = req.body;
+
+    const { access_token } = codeResponse;
+
+    const googleUserInfoResponse = await axios.get(
+      "https://www.googleapis.com/oauth2/v2/userinfo",
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+
+    const userData = googleUserInfoResponse.data;
+
+    const {
+      email,
+      given_name: firstName,
+      family_name: lastName,
+      picture: profilePicture,
+      password: id,
+    } = userData;
+
+    let user = await User.findOne({ email });
+    if (!user) {
+      user = await User.create({
+        email,
+        firstName,
+        lastName,
+        profilePicture,
+        password: id,
+      });
+    }
+    let loginUser = await User.findOne({ email });
+    const token = generateToken({
+      id: loginUser._id,
+      email: loginUser.email,
+      profilePicture: loginUser.profilePicture,
+      firstName: loginUser.firstName,
+      fullName: loginUser.fullName,
+      initials: loginUser.initials,
+      role: loginUser.role,
+    });
+    return res.status(201).json({
+      message: "Login successfull",
+      success: true,
+      data: {
+        token,
+        user: {
+          id: loginUser._id,
+          email: loginUser.email,
+          profilePicture: loginUser.profilePicture,
+          firstName: loginUser.firstName,
+          fullName: loginUser.fullName,
+          initials: loginUser.initials,
+          role: loginUser.role,
+        },
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(400).json({
+      message: "Google login failed",
+      success: false,
+    });
+  }
+};
 
 export const signup = async (req, res) => {
   try {

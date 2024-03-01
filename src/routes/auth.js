@@ -5,6 +5,8 @@ import {
   login,
   signup,
   validate,
+  googleLogin,
+  oneTapLogin,
 } from "../controllers/auth";
 import { User } from "../db";
 const { body } = require("express-validator");
@@ -44,6 +46,9 @@ router.post(
   body("email").isEmail().withMessage("Please enter a valid email"),
   login
 );
+
+router.post("/google-one-tap", oneTapLogin)
+router.post("/google-oauth", googleLogin)
 
 router.get("/validate/:token", validate)
 
