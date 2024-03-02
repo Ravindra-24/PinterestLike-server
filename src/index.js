@@ -20,7 +20,10 @@ const PORT = process.env.PORT || 8080
 
 connectDB()
 
-app.use(cors())
+app.use(cors({
+    origin: 'https://pinterest-clone-tau.vercel.app',
+    credentials: true
+}))
 app.use(express.json())
 app.use(cookieParser())
 app.use(morganMiddleware)
