@@ -7,23 +7,23 @@ import streamifier from 'streamifier'
 
 export const getPosts = async (req, res) => {
   try {
-    const { _page = 1, _limit = 20, _search } = req.query;
+    const { _page = 1, _limit = 20 } = req.query;
 
-    if (_search && _search.length > 0) {
-      const posts = await Post.find({
-        title: { $regex: _search, $options: "i" },
-      })
-        // await Post.find({$text: {$search: _search}})
-        .limit(_limit)
-        .skip((_page - 1) * 10)
-        .sort({ createdAt: -1 })
-        .populate("user");
-      return res.status(200).json({
-        message: "Posts fetched successfully",
-        success: true,
-        data: posts,
-      });
-    }
+    // if (_search && _search.length > 0) {
+    //   const posts = await Post.find({
+    //     title: { $regex: _search, $options: "i" },
+    //   })
+    //     // await Post.find({$text: {$search: _search}})
+    //     .limit(_limit)
+    //     .skip((_page - 1) * 10)
+    //     .sort({ createdAt: -1 })
+    //     .populate("user");
+    //   return res.status(200).json({
+    //     message: "Posts fetched successfully",
+    //     success: true,
+    //     data: posts,
+    //   });
+    // }
 
     // page size = 10
     const offset = (_page - 1) * 10;
@@ -32,15 +32,35 @@ export const getPosts = async (req, res) => {
       .skip(offset)
       .sort({ createdAt: -1 })
       .populate("user");
-    // .select("title description image createdAt user comments id")
-    //   .populate("comments", "commentText user");
-    // .populate({
-    //   path: "comments",
-    //   populate: {
-    //     path: "user",
-    //     select: "firstName lastName email profilePicture",
-    //   },
-    // });
+    return res.status(200).json({
+      message: "Posts fetched successfully",
+      success: true,
+      data: posts,
+    });
+  } catch (error) {
+    logger.error(error);
+    return res.status(500).json({
+      error: error.message,
+      success: false,
+    });
+  }
+};
+export const searchPost = async (req, res) => {
+  try {
+    const {  _search } = req.query;
+
+    if (!_search || _search.length === 0) {
+      return res.status(400).json({
+        message: "Search query is required",
+        success: false,
+      });
+    }
+
+    const posts = await Post.find({
+      title: { $regex: _search, $options: "i" },
+    })
+      .populate("user");
+
     return res.status(200).json({
       message: "Posts fetched successfully",
       success: true,
