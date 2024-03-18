@@ -1,30 +1,11 @@
 import { Post, Comment, User } from "../db";
 import logger from "../logger";
 import { validationResult } from "express-validator";
-import axios from "axios";
 import cloudinary from '../utils/cloudinary'
-import streamifier from 'streamifier'
 
 export const getPosts = async (req, res) => {
   try {
     const { _page = 1, _limit = 20 } = req.query;
-
-    // if (_search && _search.length > 0) {
-    //   const posts = await Post.find({
-    //     title: { $regex: _search, $options: "i" },
-    //   })
-    //     // await Post.find({$text: {$search: _search}})
-    //     .limit(_limit)
-    //     .skip((_page - 1) * 10)
-    //     .sort({ createdAt: -1 })
-    //     .populate("user");
-    //   return res.status(200).json({
-    //     message: "Posts fetched successfully",
-    //     success: true,
-    //     data: posts,
-    //   });
-    // }
-
     // page size = 10
     const offset = (_page - 1) * 10;
     const posts = await Post.find()
@@ -131,16 +112,7 @@ export const createPost = async (req, res) => {
         }
       }).end(file.buffer);
     });
-   
-    // const responseURL = await axios.post(
-    //   `https://api.upload.io/v2/accounts/${process.env.UPLOAD_IO_ACCOUNT_ID}/uploads/binary`,
-    //   file.buffer,
-    //   {
-    //     headers: {
-    //       Authorization: `Bearer ${process.env.UPLOAD_IO_API_KEY}`,
-    //     },
-    //   }
-    // );
+  
     const post = await Post.create({
       title,
       description,
@@ -165,7 +137,6 @@ export const updatePost = async (req, res) => {
   try {
     const { id } = req.params;
     const { title, description } = req.body;
-    // console.log(id, title, description);
     const post = await Post.findOne({ _id: id });
     if (!post) {
       return res.status(404).json({
@@ -184,9 +155,6 @@ export const updatePost = async (req, res) => {
       ...(description && { description }),
     });
     const updatedPost = await Post.findById(id).populate("user");
-    // post.title = title;
-    // post.description = description;
-    // await post.save();
     return res.status(200).json({
       message: "Post updated successfully",
       success: true,
@@ -241,7 +209,6 @@ export const updatePostLikes = async (req, res) => {
 
 export const deletePost = async (req, res) => {
   try {
-    //only the user who created the post can delete it and modrator
     const { id } = req.params;
     const post = await Post.findOne({ _id: id });
     if (!post) {

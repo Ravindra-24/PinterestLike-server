@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
 import logger from '../logger/index';
 
-// const DB_URL = ;
 
 export const connectDB = async () => {
     try {

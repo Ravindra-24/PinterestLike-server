@@ -23,7 +23,6 @@ router.get("/slide-show-images", getSlideShowImages);
 
 router.get("/:id", getPost);
 
-//protected
 router.post(
   "/",
   upload.single("image"),
@@ -32,7 +31,6 @@ router.post(
   createPost
 );
 
-//only the user who created the post can delete it and modrator
 router.post("/:id", authMiddleware, deletePost);
 
 router.patch("/update/:id", authMiddleware, updatePost);
