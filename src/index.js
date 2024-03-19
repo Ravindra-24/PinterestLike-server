@@ -17,7 +17,7 @@ const PORT = process.env.PORT || 8080
 connectDB()
 
 app.use(cors({
-    origin: 'https://sore-red-scrubs.cyclic.app',
+    origin: 'https://pinterest-clone-tau.vercel.app',
     credentials: true
 }))
 app.use(express.json())
