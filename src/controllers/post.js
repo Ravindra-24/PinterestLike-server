@@ -112,6 +112,7 @@ export const createPost = async (req, res) => {
         }
       }).end(file.buffer);
     });
+  
    
     const post = await Post.create({
       title,
