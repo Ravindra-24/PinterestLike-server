@@ -1,30 +1,11 @@
-import { Post, Comment, User } from "../db";
+import { Post, User } from "../db";
 import logger from "../logger";
 import { validationResult } from "express-validator";
-import axios from "axios";
 import cloudinary from '../utils/cloudinary'
-import streamifier from 'streamifier'
 
 export const getPosts = async (req, res) => {
   try {
     const { _page = 1, _limit = 20 } = req.query;
-
-    // if (_search && _search.length > 0) {
-    //   const posts = await Post.find({
-    //     title: { $regex: _search, $options: "i" },
-    //   })
-    //     // await Post.find({$text: {$search: _search}})
-    //     .limit(_limit)
-    //     .skip((_page - 1) * 10)
-    //     .sort({ createdAt: -1 })
-    //     .populate("user");
-    //   return res.status(200).json({
-    //     message: "Posts fetched successfully",
-    //     success: true,
-    //     data: posts,
-    //   });
-    // }
-
     // page size = 10
     const offset = (_page - 1) * 10;
     const posts = await Post.find()
@@ -132,15 +113,6 @@ export const createPost = async (req, res) => {
       }).end(file.buffer);
     });
    
-    // const responseURL = await axios.post(
-    //   `https://api.upload.io/v2/accounts/${process.env.UPLOAD_IO_ACCOUNT_ID}/uploads/binary`,
-    //   file.buffer,
-    //   {
-    //     headers: {
-    //       Authorization: `Bearer ${process.env.UPLOAD_IO_API_KEY}`,
-    //     },
-    //   }
-    // );
     const post = await Post.create({
       title,
       description,
