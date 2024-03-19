@@ -8,7 +8,6 @@ export const getUser = async (req, res) => {
     //   user: { id },
     // } = req;
     const { id } = req.params;
-    console.log(id);
     const user = await User.findById(id);
     if (!user) {
       return res.status(400).json({ message: "User not found" });
@@ -56,8 +55,6 @@ export const followUser = async (req, res) => {
       return res.status(400).json({ message: "User not found" });
     }
     const currentUser = await User.findById(id);
-
-    //find user followers array, if current user id is present then remove it else add it
     const index = user.followers.findIndex((item) => item == id);
     const currentUserIndex = currentUser.following.findIndex(
       (id) => id == userId

@@ -1,8 +1,5 @@
 import jwt from "jsonwebtoken";
-import logger from "../logger";
 
-// const resetPassSecret =
-// const authSecrett =
 export const verifyAuthToken = (token) => {
   try {
     const payload = jwt.verify(token, process.env.AUTH_SECRET);

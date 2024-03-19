@@ -137,7 +137,6 @@ export const updatePost = async (req, res) => {
   try {
     const { id } = req.params;
     const { title, description } = req.body;
-    // console.log(id, title, description);
     const post = await Post.findOne({ _id: id });
     if (!post) {
       return res.status(404).json({
@@ -156,9 +155,6 @@ export const updatePost = async (req, res) => {
       ...(description && { description }),
     });
     const updatedPost = await Post.findById(id).populate("user");
-    // post.title = title;
-    // post.description = description;
-    // await post.save();
     return res.status(200).json({
       message: "Post updated successfully",
       success: true,
@@ -213,7 +209,6 @@ export const updatePostLikes = async (req, res) => {
 
 export const deletePost = async (req, res) => {
   try {
-    //only the user who created the post can delete it and modrator
     const { id } = req.params;
     const post = await Post.findOne({ _id: id });
     if (!post) {
