@@ -11,6 +11,7 @@ import userRouter from './routes/user'
 import { connectDB } from './utils/db.utils'
 
 const app = express()
+
 const PORT = process.env.PORT || 8080
 
 connectDB()

@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node dist/bundle.js",
-    
+    "start": "nodemon src/index.js",
+    "build": "node_modules/.bin/webpack --config webpack.config.js --mode=production",
     "dev": "node_modules/.bin/webpack --config webpack.config.js --mode=development -w "
   },
   "keywords": [],
