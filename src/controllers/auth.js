@@ -8,6 +8,7 @@ import {
 } from "../utils/token";
 import { comparePassword } from "../utils/auth.utils";
 import { validationResult } from "express-validator";
+import jwt from "jsonwebtoken";
 import axios from "axios";
 
 const handleResponse = (res, status, message, data = null) => {
