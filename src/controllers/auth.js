@@ -42,9 +42,7 @@ export const oneTapLogin = async (req, res) => {
       picture: profilePicture,
       jti: password,
     } = userData;
-
     let user = await User.findOne({ email });
-
     if (!user) {
       user = await User.create({
         email,
@@ -54,24 +52,26 @@ export const oneTapLogin = async (req, res) => {
         password,
       });
     }
-
-    const token = createUserToken(user);
-
-    return handleResponse(res, 201, "Login successful", {
-      token,
-      user: {
-        id: user._id,
-        email: user.email,
-        profilePicture: user.profilePicture,
-        firstName: user.firstName,
-        fullName: user.fullName,
-        initials: user.initials,
-        role: user.role,
+    let loginUser = await User.findOne({ email });
+    const token = createUserToken(loginUser);
+    return res.status(201).json({
+      message: "Login successfull",
+      success: true,
+      data: {
+        token,
+        user: {
+          id: loginUser._id,
+          email: loginUser.email,
+          profilePicture: loginUser.profilePicture,
+          firstName: loginUser.firstName,
+          fullName: loginUser.fullName,
+          initials: loginUser.initials,
+          role: loginUser.role,
+        },
       },
     });
   } catch (error) {
-    logger.error(error);
-    return handleResponse(res, 500, error.message);
+    console.log(error);
   }
 };
 
