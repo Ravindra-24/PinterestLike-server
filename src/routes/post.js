@@ -1,5 +1,5 @@
 import Router from "express";
-import { authMiddleware } from "../middleware/index";
+import { authMiddleware } from "../middleware/index.js";
 import {
   getPosts,
   getPost,

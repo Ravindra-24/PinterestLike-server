@@ -1,6 +1,7 @@
-import { Post, User } from "../db";
-import logger from "../logger";
-import  cloudinary  from "../utils/cloudinary";
+import { Post } from "../db/schema/Post.js";
+import { User } from "../db/schema/User.js";
+
+import cloudinary from "../utils/cloudinary.js";
 
 export const getUser = async (req, res) => {
   try {

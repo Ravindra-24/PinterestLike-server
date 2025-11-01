@@ -1,7 +1,8 @@
-import { Post, User } from "../db";
-import logger from "../logger";
+import { Post } from "../db/schema/Post.js";
+import { User } from "../db/schema/User.js";
+
 import { validationResult } from "express-validator";
-import cloudinary from '../utils/cloudinary'
+import cloudinary from '../utils/cloudinary.js'
 
 export const getPosts = async (req, res) => {
   try {

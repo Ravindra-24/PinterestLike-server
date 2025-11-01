@@ -1,3 +1,3 @@
-export * from "./schema/User";
-export * from "./schema/Post";
-export * from "./schema/Comment";
+export * from "./schema/User.js";
+export * from "./schema/Post.js";
+export * from "./schema/Comment.js";

@@ -1,5 +1,7 @@
-import { Post, Comment, User } from "../db";
-import logger from "../logger";
+import { Post } from "../db/schema/Post.js";
+import { Comment } from "../db/schema/Comment.js";
+import { User } from "../db/schema/User.js";
+
 
 export const comment = async (req, res) => {
   try {

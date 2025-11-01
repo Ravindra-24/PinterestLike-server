@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { body } from "express-validator";
 import {
   forgotPassword,
   resetPassword,
@@ -7,9 +8,9 @@ import {
   validate,
   googleLogin,
   oneTapLogin,
-} from "../controllers/auth";
-import { User } from "../db";
-const { body } = require("express-validator");
+} from "../controllers/auth.js";
+import { User } from "../db/schema/User.js";
+
 const router = Router();
 
 router.post("/forgot-password",

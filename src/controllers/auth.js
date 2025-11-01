@@ -1,12 +1,11 @@
-import { User } from "../db";
-import logger from "../logger";
+import { User } from "../db/schema/User.js";
 import {
   generateToken,
   generateResetToken,
   verifyResetToken,
   verifyAuthToken,
-} from "../utils/token";
-import { comparePassword } from "../utils/auth.utils";
+} from "../utils/token.js";
+import { comparePassword } from "../utils/auth.utils.js";
 import { validationResult } from "express-validator";
 import jwt from "jsonwebtoken";
 import axios from "axios";
