@@ -23,6 +23,6 @@ cp .env.example .env        # only if .env does not exist
 npm run seed:demo
 ```
 
-The command is idempotent: running it again updates the same demo accounts and content instead of creating duplicates. It also resets every demo account to the password shown above.
+The command creates 42 posts across the demo accounts, along with comments, likes, follows, collections, and notifications. It is idempotent: running it again updates the same demo accounts and content instead of creating duplicates. It also resets every demo account to the password shown above.
 
 > Do not use these public credentials for a production account or seed a production database. The script refuses to run when `NODE_ENV=production` unless the explicit `--allow-production` flag is supplied.

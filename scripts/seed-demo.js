@@ -135,6 +135,63 @@ const postSeeds = [
   },
 ];
 
+const catalogPostSeeds = [
+  ["sunlit-living-room", "maya", "Sunlit living room", "Soft linen, pale timber, and an easy layout built around natural light.", "1524758631624-e2822e304c36", "Interiors", ["living room", "natural light", "minimal"]],
+  ["warm-bedroom-layers", "maya", "Warm bedroom layers", "A restful bedroom palette with tactile throws and quiet earth tones.", "1600566753086-00f18fb6b3ea", "Interiors", ["bedroom", "textiles", "cozy"]],
+  ["modern-dining-space", "maya", "Modern dining space", "Clean lines and warm wood make this dining room feel welcoming rather than formal.", "1600210492486-724fe5c67fb0", "Interiors", ["dining room", "wood", "modern"]],
+  ["creative-studio-desk", "demo", "Creative studio desk", "A practical studio setup with room for sketches, samples, and focused work.", "1497366216548-37526070297c", "Interiors", ["studio", "desk", "creative"]],
+  ["quiet-kitchen-details", "maya", "Quiet kitchen details", "Simple storage and honest materials for a kitchen that works hard without visual noise.", "1449844908441-8829872d2607", "Interiors", ["kitchen", "storage", "details"]],
+  ["courtyard-house", "maya", "Courtyard house geometry", "Strong geometric forms softened by greenery and an open central courtyard.", "1487958449943-2429e8be8625", "Architecture", ["courtyard", "modern house", "geometry"]],
+  ["concrete-and-sky", "demo", "Concrete and open sky", "An architectural study in shadow, scale, and crisp concrete planes.", "1518005020951-eccb494ad742", "Architecture", ["concrete", "minimalism", "facade"]],
+  ["city-facade-rhythm", "arjun", "City facade rhythm", "Repeating windows and balconies turn an everyday elevation into a graphic pattern.", "1480714378408-67cf0d13bc1b", "Architecture", ["city", "facade", "pattern"]],
+  ["desert-modern-home", "maya", "Desert modern home", "Low forms, sandy color, and deep shade designed for a dry landscape.", "1549490349-8643362247b5", "Architecture", ["desert", "house", "landscape"]],
+  ["museum-lines", "demo", "Museum lines", "A quiet perspective where structure, light, and negative space do the talking.", "1511818966892-d7d671e672a2", "Architecture", ["museum", "lines", "perspective"]],
+  ["misty-forest-path", "arjun", "Misty forest path", "A green trail disappearing into fog—ideal inspiration for a slow weekend outdoors.", "1441974231531-c6227db76b6e", "Nature", ["forest", "mist", "trail"]],
+  ["alpine-lake-morning", "arjun", "Alpine lake morning", "Still water and sharp mountain air captured just after sunrise.", "1469474968028-56623f02e42e", "Nature", ["lake", "mountains", "morning"]],
+  ["golden-field", "demo", "A field at golden hour", "Late sunlight turns a simple open field into layers of warm color.", "1470252649378-9c29740c9fa8", "Nature", ["golden hour", "field", "sunset"]],
+  ["highland-valley", "arjun", "Highland valley", "A broad green valley with enough distance to make everything feel unhurried.", "1501785888041-af3ef285b470", "Nature", ["valley", "hiking", "landscape"]],
+  ["snowy-ridge", "arjun", "Snowy ridge study", "A cool-toned mountain study balancing dramatic peaks with a soft sky.", "1493246507139-91e8fad9978e", "Nature", ["snow", "ridge", "mountains"]],
+  ["wild-meadow", "maya", "Wild meadow notes", "Loose grasses and small blooms make a naturally textured planting reference.", "1472214103451-9374bd1c798e", "Nature", ["meadow", "wildflowers", "garden"]],
+  ["street-style-neutral", "demo", "Street style in neutrals", "Relaxed tailoring and a restrained palette for an easy everyday uniform.", "1529139574466-a303027c1d8b", "Fashion", ["street style", "neutral", "tailoring"]],
+  ["colorful-wardrobe", "maya", "A more colorful wardrobe", "A cheerful edit of color, texture, and pieces that layer well together.", "1483985988355-763728e1935b", "Fashion", ["wardrobe", "color", "style"]],
+  ["weekend-layers", "demo", "Weekend layers", "Comfortable proportions and light layers for an adaptable weekend look.", "1490481651871-ab68de25d43d", "Fashion", ["layers", "weekend", "outfit"]],
+  ["monochrome-look", "maya", "Monochrome with texture", "One-color dressing made interesting through shape, weave, and subtle contrast.", "1515886657613-9f3515b0c78f", "Fashion", ["monochrome", "texture", "minimal"]],
+  ["shared-table", "arjun", "A table made for sharing", "A generous spread of colorful plates for a long meal with friends.", "1504674900247-0877df9cc836", "Food", ["dinner", "sharing", "table"]],
+  ["fresh-market-bowl", "arjun", "Fresh market bowl", "Crisp vegetables, grains, and a bright dressing for an unfussy lunch.", "1540189549336-e6e99c3679fe", "Food", ["salad", "lunch", "fresh"]],
+  ["homemade-pizza-night", "demo", "Homemade pizza night", "A crisp, bubbling pizza that makes a convincing case for staying in.", "1565299624946-b28f40a0ae38", "Food", ["pizza", "weeknight", "recipe"]],
+  ["slow-breakfast", "arjun", "A slow breakfast", "Coffee, fruit, and something warm from the oven for an unhurried start.", "1551183053-bf91a1d81141", "Food", ["breakfast", "coffee", "weekend"]],
+  ["colorful-vegetable-plate", "maya", "Colorful vegetable plate", "Seasonal vegetables arranged with plenty of texture, herbs, and crunch.", "1476224203421-9ac39bcb3327", "Food", ["vegetables", "healthy", "seasonal"]],
+  ["abstract-color-study", "demo", "Abstract color study", "Overlapping forms and confident color combinations for a bold visual reference.", "1547891654-e66ed7ebb968", "Art", ["abstract", "color", "painting"]],
+  ["gallery-wall-notes", "maya", "Gallery wall notes", "A collected arrangement that mixes scale and style while keeping a clear rhythm.", "1579783902614-a3fb3927b6a5", "Art", ["gallery wall", "art", "composition"]],
+  ["paint-and-motion", "demo", "Paint and motion", "Expressive marks and layered pigment create movement across the surface.", "1541961017774-22349e4a1262", "Art", ["painting", "texture", "movement"]],
+  ["camera-on-the-road", "arjun", "Camera on the road", "A compact photography kit ready for long walks and unexpected frames.", "1452780212940-6f5c0d14d848", "Photography", ["camera", "travel", "gear"]],
+  ["shadow-and-window", "demo", "Shadow and window", "A reminder that ordinary light can become the entire subject of a photograph.", "1452587925148-ce544e77e70d", "Photography", ["shadow", "light", "composition"]],
+  ["quiet-beach", "arjun", "A quiet beach escape", "Clear water, pale sand, and an almost empty horizon saved for later.", "1507525428034-b723cf961d3e", "Travel", ["beach", "island", "escape"]],
+  ["coastal-road-trip", "arjun", "Coastal road trip", "A winding route with ocean views and plenty of reasons to stop along the way.", "1476514525535-07fb3b4ae5f1", "Travel", ["coast", "road trip", "ocean"]],
+  ["old-city-walk", "maya", "An old-city walk", "Weathered streets, small cafes, and details best discovered without a schedule.", "1488646953014-85cb44e25828", "Travel", ["city", "walking", "architecture"]],
+  ["train-window-journey", "demo", "Train-window journey", "Changing landscapes and a window seat make the journey part of the destination.", "1503220317375-aaad61436b1b", "Travel", ["train", "journey", "landscape"]],
+  ["paris-side-street", "maya", "Paris side street", "A quieter corner of the city with balconies, bicycles, and morning light.", "1499856871958-5b9627545d1a", "Travel", ["paris", "street", "city"]],
+  ["weekend-cabin", "arjun", "Weekend cabin retreat", "A small hideaway surrounded by trees and designed around the view.", "1500835556837-99ac94a94552", "Travel", ["cabin", "weekend", "nature"]],
+];
+
+const demoColors = ["#b9a58e", "#7d8b75", "#9e7764", "#71818c", "#c09062", "#69645f"];
+postSeeds.push(...catalogPostSeeds.map(([key, owner, title, description, photoId, category, tags], index) => {
+  const height = [1500, 900, 1350, 1600][index % 4];
+  const image = `https://images.unsplash.com/photo-${photoId}?w=1200&h=${height}&auto=format&fit=crop`;
+  return {
+    key,
+    owner,
+    title,
+    description,
+    image,
+    category,
+    tags,
+    width: 1200,
+    height,
+    dominantColor: demoColors[index % demoColors.length],
+  };
+}));
+
 const commentSeeds = [
   { user: "arjun", post: "reading-corner", text: "The warm lighting makes this feel so inviting." },
   { user: "demo", post: "reading-corner", text: "Saving this for my next room refresh." },
@@ -220,11 +277,15 @@ try {
     "desk-setup": ["maya", "arjun"],
     "ceramic-palette": ["maya"],
   };
-  for (const seed of postSeeds) {
+  for (const [index, seed] of postSeeds.entries()) {
     const owner = users.get(seed.owner);
     let post = await Post.findOne({ user: owner._id, slug: seed.key });
     if (!post) post = new Post();
-    const likes = likeMap[seed.key].map((key) => users.get(key)._id);
+    const fallbackLikes = accountSeeds
+      .filter(({ key }) => key !== seed.owner)
+      .slice(0, (index % 3) + 1)
+      .map(({ key }) => key);
+    const likes = (likeMap[seed.key] || fallbackLikes).map((key) => users.get(key)._id);
     Object.assign(post, {
       title: seed.title,
       description: seed.description,
