@@ -8,7 +8,8 @@ import { fail, ok } from "../../utils/response.js";
 import { slugify } from "../../utils/slug.js";
 
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
-const cookieName = "canvas_refresh";
+const cookieName = "curiofold_refresh";
+const legacyCookieName = "canvas_refresh";
 
 const cookieOptions = () => ({
   httpOnly: true,
@@ -73,11 +74,15 @@ export const googleLogin = async (req, res) => {
 };
 
 export const refresh = async (req, res) => {
-  const token = req.cookies?.[cookieName];
+  const token = req.cookies?.[cookieName] || req.cookies?.[legacyCookieName];
   if (!token) return fail(res, 401, "Your session has expired", "SESSION_EXPIRED");
   const tokenHash = hashToken(token);
   const user = await User.findOne({ refreshSessions: { $elemMatch: { tokenHash, expiresAt: { $gt: new Date() } } }, disabled: false, deletedAt: null });
-  if (!user) { res.clearCookie(cookieName, cookieOptions()); return fail(res, 401, "Your session has expired", "SESSION_EXPIRED"); }
+  if (!user) {
+    res.clearCookie(cookieName, cookieOptions());
+    res.clearCookie(legacyCookieName, cookieOptions());
+    return fail(res, 401, "Your session has expired", "SESSION_EXPIRED");
+  }
   user.refreshSessions = user.refreshSessions.filter((session) => session.tokenHash !== tokenHash);
   return issueSession(req, res, user);
 };
@@ -89,8 +94,9 @@ export const me = async (req, res) => {
 };
 
 export const logout = async (req, res) => {
-  const token = req.cookies?.[cookieName];
+  const token = req.cookies?.[cookieName] || req.cookies?.[legacyCookieName];
   if (token) await User.updateOne({ "refreshSessions.tokenHash": hashToken(token) }, { $pull: { refreshSessions: { tokenHash: hashToken(token) } } });
   res.clearCookie(cookieName, cookieOptions());
+  res.clearCookie(legacyCookieName, cookieOptions());
   return ok(res, { loggedOut: true });
 };

@@ -52,7 +52,7 @@ app.use("/api/posts", postRoutes);
 app.use("/api/comments", commentRoutes);
 app.use("/api/users", userRoutes);
 
-app.get("/", (_req, res) => res.status(200).json({ status: "ok", service: "canvas-api", version: "v1" }));
+app.get("/", (_req, res) => res.status(200).json({ status: "ok", service: "curiofold-api", version: "v1" }));
 app.get("/health", (_req, res) => res.status(200).json({ status: "ok", timestamp: new Date().toISOString() }));
 
 app.use((req, res) => fail(res, 404, "Route not found", "NOT_FOUND"));

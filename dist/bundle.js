@@ -219373,7 +219373,7 @@ app.use("/api/comments", _routes_comment_js__WEBPACK_IMPORTED_MODULE_9__["defaul
 app.use("/api/users", _routes_user_js__WEBPACK_IMPORTED_MODULE_10__["default"]);
 app.get("/", (_req, res) => res.status(200).json({
   status: "ok",
-  service: "canvas-api",
+  service: "curiofold-api",
   version: "v1"
 }));
 app.get("/health", (_req, res) => res.status(200).json({
@@ -220502,7 +220502,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 var googleClient = new google_auth_library__WEBPACK_IMPORTED_MODULE_0__.OAuth2Client(process.env.GOOGLE_CLIENT_ID);
-var cookieName = "canvas_refresh";
+var cookieName = "curiofold_refresh";
+var legacyCookieName = "canvas_refresh";
 var cookieOptions = () => ({
   httpOnly: true,
   secure: "development" === "production",
@@ -220635,8 +220636,8 @@ var googleLogin = /*#__PURE__*/function () {
 }();
 var refresh = /*#__PURE__*/function () {
   var _ref6 = _asyncToGenerator(function* (req, res) {
-    var _req$cookies;
-    var token = (_req$cookies = req.cookies) === null || _req$cookies === void 0 ? void 0 : _req$cookies[cookieName];
+    var _req$cookies, _req$cookies2;
+    var token = ((_req$cookies = req.cookies) === null || _req$cookies === void 0 ? void 0 : _req$cookies[cookieName]) || ((_req$cookies2 = req.cookies) === null || _req$cookies2 === void 0 ? void 0 : _req$cookies2[legacyCookieName]);
     if (!token) return (0,_utils_response_js__WEBPACK_IMPORTED_MODULE_6__.fail)(res, 401, "Your session has expired", "SESSION_EXPIRED");
     var tokenHash = (0,_utils_token_js__WEBPACK_IMPORTED_MODULE_4__.hashToken)(token);
     var user = yield _db_schema_User_js__WEBPACK_IMPORTED_MODULE_2__.User.findOne({
@@ -220653,6 +220654,7 @@ var refresh = /*#__PURE__*/function () {
     });
     if (!user) {
       res.clearCookie(cookieName, cookieOptions());
+      res.clearCookie(legacyCookieName, cookieOptions());
       return (0,_utils_response_js__WEBPACK_IMPORTED_MODULE_6__.fail)(res, 401, "Your session has expired", "SESSION_EXPIRED");
     }
     user.refreshSessions = user.refreshSessions.filter(session => session.tokenHash !== tokenHash);
@@ -220680,8 +220682,8 @@ var me = /*#__PURE__*/function () {
 }();
 var logout = /*#__PURE__*/function () {
   var _ref8 = _asyncToGenerator(function* (req, res) {
-    var _req$cookies2;
-    var token = (_req$cookies2 = req.cookies) === null || _req$cookies2 === void 0 ? void 0 : _req$cookies2[cookieName];
+    var _req$cookies3, _req$cookies4;
+    var token = ((_req$cookies3 = req.cookies) === null || _req$cookies3 === void 0 ? void 0 : _req$cookies3[cookieName]) || ((_req$cookies4 = req.cookies) === null || _req$cookies4 === void 0 ? void 0 : _req$cookies4[legacyCookieName]);
     if (token) yield _db_schema_User_js__WEBPACK_IMPORTED_MODULE_2__.User.updateOne({
       "refreshSessions.tokenHash": (0,_utils_token_js__WEBPACK_IMPORTED_MODULE_4__.hashToken)(token)
     }, {
@@ -220692,6 +220694,7 @@ var logout = /*#__PURE__*/function () {
       }
     });
     res.clearCookie(cookieName, cookieOptions());
+    res.clearCookie(legacyCookieName, cookieOptions());
     return (0,_utils_response_js__WEBPACK_IMPORTED_MODULE_6__.ok)(res, {
       loggedOut: true
     });
@@ -223236,7 +223239,7 @@ var publicUser = function publicUser(user) {
     virtuals: false
   }) : user;
   var id = String(source._id || source.id);
-  var displayName = source.displayName || [source.firstName, source.lastName].filter(Boolean).join(" ") || "Canvas member";
+  var displayName = source.displayName || [source.firstName, source.lastName].filter(Boolean).join(" ") || "Curiofold member";
   return _objectSpread({
     id,
     username: source.username || "member-".concat(id.slice(-6)),
@@ -223375,8 +223378,8 @@ __webpack_require__.r(__webpack_exports__);
 var verifyAuthToken = token => {
   try {
     var payload = jsonwebtoken__WEBPACK_IMPORTED_MODULE_0__.verify(token, process.env.AUTH_SECRET, {
-      issuer: "canvas-api",
-      audience: "canvas-web"
+      issuer: "curiofold-api",
+      audience: "curiofold-web"
     });
     return payload;
   } catch (error) {
@@ -223391,8 +223394,8 @@ var verifyAuthToken = token => {
 var generateToken = payload => {
   return jsonwebtoken__WEBPACK_IMPORTED_MODULE_0__.sign(payload, process.env.AUTH_SECRET, {
     expiresIn: "15m",
-    issuer: "canvas-api",
-    audience: "canvas-web"
+    issuer: "curiofold-api",
+    audience: "curiofold-web"
   });
 };
 var generateRefreshToken = () => node_crypto__WEBPACK_IMPORTED_MODULE_1__.randomBytes(48).toString("base64url");

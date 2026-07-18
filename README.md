@@ -1,6 +1,6 @@
-# Canvas API
+# Curiofold API
 
-A Firebase Cloud Functions API for the visual discovery product. `Canvas` is a configurable working name until rebrand approval.
+A Firebase Cloud Functions API for the Curiofold visual discovery product.
 
 ## Architecture
 

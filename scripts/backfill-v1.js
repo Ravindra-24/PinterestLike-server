@@ -16,7 +16,7 @@ for await (const user of User.find({ $or: [{ username: { $exists: false } }, { d
   while (usernames.has(username)) username = `${base}-${++suffix}`;
   usernames.add(username);
   user.username = username;
-  user.displayName ||= [user.firstName, user.lastName].filter(Boolean).join(" ") || "Canvas member";
+  user.displayName ||= [user.firstName, user.lastName].filter(Boolean).join(" ") || "Curiofold member";
   user.followerCount = user.followers?.length || 0;
   user.followingCount = user.following?.length || 0;
   user.postCount = user.posts?.length || 0;

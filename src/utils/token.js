@@ -3,7 +3,7 @@ import crypto from "node:crypto";
 
 export const verifyAuthToken = (token) => {
   try {
-    const payload = jwt.verify(token, process.env.AUTH_SECRET, { issuer: "canvas-api", audience: "canvas-web" });
+    const payload = jwt.verify(token, process.env.AUTH_SECRET, { issuer: "curiofold-api", audience: "curiofold-web" });
     return payload;
   } catch (error) {
     try {
@@ -16,7 +16,7 @@ export const verifyAuthToken = (token) => {
 };
 
 export const generateToken = (payload) => {
-  return jwt.sign(payload, process.env.AUTH_SECRET, { expiresIn: "15m", issuer: "canvas-api", audience: "canvas-web" });
+  return jwt.sign(payload, process.env.AUTH_SECRET, { expiresIn: "15m", issuer: "curiofold-api", audience: "curiofold-web" });
 };
 
 export const generateRefreshToken = () => crypto.randomBytes(48).toString("base64url");

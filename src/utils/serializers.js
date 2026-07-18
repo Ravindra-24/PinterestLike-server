@@ -4,7 +4,7 @@ export const publicUser = (user, viewerId = null) => {
   if (!user) return null;
   const source = user.toObject ? user.toObject({ virtuals: false }) : user;
   const id = String(source._id || source.id);
-  const displayName = source.displayName || [source.firstName, source.lastName].filter(Boolean).join(" ") || "Canvas member";
+  const displayName = source.displayName || [source.firstName, source.lastName].filter(Boolean).join(" ") || "Curiofold member";
   return {
     id,
     username: source.username || `member-${id.slice(-6)}`,
