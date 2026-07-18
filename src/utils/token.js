@@ -1,17 +1,29 @@
 import jwt from "jsonwebtoken";
+import crypto from "node:crypto";
 
 export const verifyAuthToken = (token) => {
   try {
-    const payload = jwt.verify(token, process.env.AUTH_SECRET);
+    const payload = jwt.verify(token, process.env.AUTH_SECRET, { issuer: "canvas-api", audience: "canvas-web" });
     return payload;
   } catch (error) {
-    return false;
+    try {
+      // Compatibility for access tokens issued before the v1 session migration.
+      return jwt.verify(token, process.env.AUTH_SECRET);
+    } catch {
+      return false;
+    }
   }
 };
 
 export const generateToken = (payload) => {
-  return jwt.sign(payload, process.env.AUTH_SECRET, { expiresIn: "1d" });
+  return jwt.sign(payload, process.env.AUTH_SECRET, { expiresIn: "15m", issuer: "canvas-api", audience: "canvas-web" });
 };
+
+export const generateRefreshToken = () => crypto.randomBytes(48).toString("base64url");
+
+export const hashToken = (token) => crypto.createHash("sha256").update(token).digest("hex");
+
+export const refreshTokenExpiry = () => new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
 
 export const generateResetToken = (payload) => {
   return jwt.sign(payload, process.env.RESET_PASSWORD_SECRET, {

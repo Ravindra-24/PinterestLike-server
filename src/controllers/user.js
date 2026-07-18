@@ -9,7 +9,7 @@ export const getUser = async (req, res) => {
     //   user: { id },
     // } = req;
     const { id } = req.params;
-    const user = await User.findById(id);
+    const user = await User.findById(id).select("username displayName firstName lastName bio profilePicture createdAt followerCount followingCount postCount followers following posts");
     if (!user) {
       return res.status(400).json({ message: "User not found" });
     }
@@ -17,7 +17,7 @@ export const getUser = async (req, res) => {
       .status(200)
       .json({ message: "verified", success: true, data: user });
   } catch (error) {
-    logger.error(error);
+    console.error(error);
     return res.status(500).json({ error: error.message, success: false });
   }
 };
@@ -36,7 +36,7 @@ export const getUserPosts = async (req, res) => {
       .status(200)
       .json({ message: "fetched user posts", success: true, data: posts });
   } catch (error) {
-    logger.error(error);
+    console.error(error);
     return res.status(500).json({ error: error.message, success: false });
   }
 };

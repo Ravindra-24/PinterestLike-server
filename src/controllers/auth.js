@@ -7,8 +7,9 @@ import {
 } from "../utils/token.js";
 import { comparePassword } from "../utils/auth.utils.js";
 import { validationResult } from "express-validator";
-import jwt from "jsonwebtoken";
-import axios from "axios";
+import { OAuth2Client } from "google-auth-library";
+
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 const handleResponse = (res, status, message, data = null) => {
   return res.status(status).json({
@@ -34,13 +35,15 @@ export const oneTapLogin = async (req, res) => {
   try {
     const { CredentialResponse } = req.body;
     const { credential } = CredentialResponse;
-    const userData = jwt.decode(credential);
+    if (!credential || !process.env.GOOGLE_CLIENT_ID) return handleResponse(res, 400, "Google sign-in is not configured");
+    const ticket = await googleClient.verifyIdToken({ idToken: credential, audience: process.env.GOOGLE_CLIENT_ID });
+    const userData = ticket.getPayload();
     const {
       email,
       given_name: firstName,
       family_name: lastName,
       picture: profilePicture,
-      jti: password,
+      sub: password,
     } = userData;
     let user = await User.findOne({ email });
     if (!user) {
@@ -71,7 +74,8 @@ export const oneTapLogin = async (req, res) => {
       },
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    return handleResponse(res, 401, "Google sign-in could not be verified");
   }
 };
 
@@ -79,16 +83,9 @@ export const googleLogin = async (req, res) => {
   try {
     const { codeResponse } = req.body;
     const { access_token } = codeResponse;
-    const googleUserInfoResponse = await axios.get(
-      "https://www.googleapis.com/oauth2/v2/userinfo",
-      {
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-        },
-      }
-    );
-
-    const userData = googleUserInfoResponse.data;
+    const googleUserInfoResponse = await fetch("https://www.googleapis.com/oauth2/v2/userinfo", { headers: { Authorization: `Bearer ${access_token}` } });
+    if (!googleUserInfoResponse.ok) return handleResponse(res, 401, "Google sign-in could not be verified");
+    const userData = await googleUserInfoResponse.json();
 
     const {
       email,
@@ -125,7 +122,7 @@ export const googleLogin = async (req, res) => {
       },
     });
   } catch (error) {
-    logger.error(error);
+    console.error(error);
     return handleResponse(res, 500, error.message);
   }
 };
@@ -148,7 +145,7 @@ export const signup = async (req, res) => {
 
     return handleResponse(res, 201, "Signup successful");
   } catch (error) {
-    logger.error(error);
+    console.error(error);
     return handleResponse(res, 500, error.message);
   }
 };
@@ -188,7 +185,7 @@ export const login = async (req, res) => {
       },
     });
   } catch (error) {
-    logger.error(error);
+    console.error(error);
     return handleResponse(res, 500, error.message);
   }
 };
@@ -208,14 +205,18 @@ export const forgotPassword = async (req, res, next) => {
     }
 
     const token = generateResetToken({ email });
-    const resetPasswordLink = `http://localhost:3000/reset-password/${token}`;
+    const resetPasswordLink = `${process.env.SITE_URL || "http://localhost:5173"}/reset-password/${token}`;
 
-    return handleResponse(res, 200, "Reset password link sent to email", {
-      resetPasswordLink,
-      token,
-    });
+    if (process.env.RESET_EMAIL_WEBHOOK_URL) {
+      await fetch(process.env.RESET_EMAIL_WEBHOOK_URL, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ to: user.email, template: "password-reset", resetPasswordLink }),
+      });
+    }
+    return handleResponse(res, 200, "If that account exists, a reset link has been sent", process.env.NODE_ENV === "development" ? { resetPasswordLink } : null);
   } catch (error) {
-    logger.error(error);
+    console.error(error);
     return handleResponse(res, 500, error.message);
   }
 };
@@ -242,7 +243,7 @@ export const resetPassword = async (req, res) => {
 
     return handleResponse(res, 200, "Password updated successfully");
   } catch (error) {
-    logger.error(error);
+    console.error(error);
     return handleResponse(res, 500, error.message);
   }
 };
@@ -270,7 +271,7 @@ export const validate = async (req, res) => {
       },
     });
   } catch (error) {
-    logger.error(error);
+    console.error(error);
     return handleResponse(res, 500, error.message);
   }
 };

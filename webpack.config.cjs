@@ -4,10 +4,17 @@ const NodemonPlugin = require('nodemon-webpack-plugin');
 module.exports = {
     entry:'./src/index.js',
     output:{
-        filename:'bundle.js',
+        filename:'bundle.cjs',
         path:path.resolve(__dirname,'dist')
     },
     target:'node',
+    externalsPresets: { node: true },
+    externals: [({ request }, callback) => {
+        if (request && !request.startsWith('.') && !path.isAbsolute(request)) {
+            return callback(null, `commonjs ${request}`);
+        }
+        callback();
+    }],
     module:{
         rules:[
             {

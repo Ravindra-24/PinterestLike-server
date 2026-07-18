@@ -7,5 +7,5 @@ export const expressApi = onRequest({
     region: 'asia-south1',
     timeoutSeconds: 540,
     memory: '512MiB',
-    minInstances: 1
+    minInstances: 0
 }, app);

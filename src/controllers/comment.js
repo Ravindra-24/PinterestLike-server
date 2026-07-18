@@ -7,10 +7,11 @@ export const comment = async (req, res) => {
   try {
     //only the user who created the post can delete it and modrator
     const { id } = req.params;
-    const { commentText, userId } = req.body;
+    const { commentText } = req.body;
     const comment = await Comment.create({
       commentText,
-      user: userId,
+      user: req.user.id,
+      post: id,
     });
     const updatedPost = await Post.findByIdAndUpdate(
       id,
@@ -29,7 +30,7 @@ export const comment = async (req, res) => {
       data: updatedPost,
     });
   } catch (error) {
-    logger.error(error);
+    console.error(error);
     return res.status(500).json({
       error: error.message,
       success: false,
@@ -111,7 +112,7 @@ export const deleteComment = async (req, res) => {
       data: updatedPost,
     });
   } catch (error) {
-    logger.error(error);
+    console.error(error);
     return res.status(500).json({
       error: error.message,
       success: false,

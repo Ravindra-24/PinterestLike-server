@@ -16,6 +16,19 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique:true,
     },
+    username: {
+        type: String,
+        trim: true,
+        lowercase: true,
+        unique: true,
+        sparse: true,
+        index: true,
+    },
+    displayName: {
+        type: String,
+        trim: true,
+        maxlength: 80,
+    },
     bio:{
         type:String,
         required:false,
@@ -69,6 +82,17 @@ const userSchema = new mongoose.Schema({
     tokens : [{
         type:String,
     }],
+    refreshSessions: [{
+        tokenHash: { type: String, required: true },
+        expiresAt: { type: Date, required: true },
+        userAgent: { type: String, maxlength: 300 },
+        createdAt: { type: Date, default: Date.now },
+    }],
+    interests: [{ type: String, trim: true }],
+    followerCount: { type: Number, default: 0, min: 0 },
+    followingCount: { type: Number, default: 0, min: 0 },
+    postCount: { type: Number, default: 0, min: 0 },
+    deletedAt: { type: Date, default: null },
 }, {
     timestamps:true,
 })
@@ -78,7 +102,7 @@ userSchema.virtual('fullName').get(function(){
 })
 
 userSchema.virtual('initials').get(function(){
-    return `${this.firstName[0]}${this.lastName[0]}`
+    return `${this.firstName?.[0] || ''}${this.lastName?.[0] || ''}`
 })
 
 userSchema.pre('save',async function(next){
@@ -107,5 +131,7 @@ userSchema.statics.findByEmail = async function(email){
         throw error
     }
 }
+
+userSchema.index({ disabled: 1, deletedAt: 1 });
 
 export const User = mongoose.model('User', userSchema)

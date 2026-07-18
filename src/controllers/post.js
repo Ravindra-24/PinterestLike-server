@@ -13,14 +13,14 @@ export const getPosts = async (req, res) => {
       .limit(_limit)
       .skip(offset)
       .sort({ createdAt: -1 })
-      .populate("user");
+      .populate("user", "username displayName firstName lastName bio profilePicture createdAt followerCount followingCount postCount");
     return res.status(200).json({
       message: "Posts fetched successfully",
       success: true,
       data: posts,
     });
   } catch (error) {
-    logger.error(error);
+    console.error(error);
     return res.status(500).json({
       error: error.message,
       success: false,
@@ -41,7 +41,7 @@ export const searchPost = async (req, res) => {
     const posts = await Post.find({
       title: { $regex: _search, $options: "i" },
     })
-      .populate("user");
+      .populate("user", "username displayName firstName lastName bio profilePicture createdAt followerCount followingCount postCount");
 
     return res.status(200).json({
       message: "Posts fetched successfully",
@@ -49,7 +49,7 @@ export const searchPost = async (req, res) => {
       data: posts,
     });
   } catch (error) {
-    logger.error(error);
+    console.error(error);
     return res.status(500).json({
       error: error.message,
       success: false,
@@ -61,7 +61,7 @@ export const getPost = async (req, res) => {
   try {
     const id = req.params.id;
     const post = await Post.findOne({ _id: id })
-      .populate("user")
+      .populate("user", "username displayName firstName lastName bio profilePicture createdAt followerCount followingCount postCount")
       .populate({
         path: "comments",
         populate: {
@@ -81,7 +81,7 @@ export const getPost = async (req, res) => {
       data: post,
     });
   } catch (error) {
-    logger.error(error);
+    console.error(error);
     return res.status(500).json({
       error: error.message,
       success: false,
@@ -93,7 +93,7 @@ export const createPost = async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      logger.error(errors);
+      console.error(errors);
       return res.status(400).json({
         errors: errors.array(),
         success: false,
@@ -127,7 +127,7 @@ export const createPost = async (req, res) => {
       data: post,
     });
   } catch (error) {
-    logger.error(error);
+    console.error(error);
     return res.status(500).json({
       error: error.message,
       success: false,
@@ -156,7 +156,7 @@ export const updatePost = async (req, res) => {
       ...(title && { title }),
       ...(description && { description }),
     });
-    const updatedPost = await Post.findById(id).populate("user");
+    const updatedPost = await Post.findById(id).populate("user", "username displayName firstName lastName bio profilePicture createdAt followerCount followingCount postCount");
     return res.status(200).json({
       message: "Post updated successfully",
       success: true,
@@ -232,7 +232,7 @@ export const deletePost = async (req, res) => {
       success: true,
     });
   } catch (error) {
-    logger.error(error);
+    console.error(error);
     return res.status(500).json({
       error: error.message,
       success: false,
@@ -249,7 +249,7 @@ export const getSlideShowImages = async (req, res) => {
       success: true,
     });
   } catch (error) {
-    logger.error(error);
+    console.error(error);
     return res.status(500).json({
       error: error.message,
       success: false,
