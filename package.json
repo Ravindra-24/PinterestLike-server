@@ -12,7 +12,8 @@
     "build": "webpack --config webpack.config.cjs --mode=production",
     "dev": "node_modules/.bin/webpack --config webpack.config.cjs --mode=development -w",
     "test": "vitest run",
-    "backfill:v1": "node scripts/backfill-v1.js"
+    "backfill:v1": "node scripts/backfill-v1.js",
+    "seed:demo": "node scripts/seed-demo.js"
   },
   "keywords": [],
   "author": "",

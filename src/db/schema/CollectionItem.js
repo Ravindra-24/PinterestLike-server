@@ -4,7 +4,7 @@ const CollectionItemSchema = new mongoose.Schema({
   collection: { type: mongoose.Schema.Types.ObjectId, ref: "Collection", required: true, index: true },
   post: { type: mongoose.Schema.Types.ObjectId, ref: "Post", required: true, index: true },
   addedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-}, { timestamps: true });
+}, { timestamps: true, suppressReservedKeysWarning: true });
 
 CollectionItemSchema.index({ collection: 1, post: 1 }, { unique: true });
 

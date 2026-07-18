@@ -20,6 +20,16 @@ npm test
 npm run build
 ```
 
+## Demo data
+
+To add reusable demo users, posts, comments, follows, collections, and notifications to the configured development database:
+
+```bash
+npm run seed:demo
+```
+
+The login emails and passwords are listed in [`DEMO_ACCOUNTS.md`](./DEMO_ACCOUNTS.md). The seed is idempotent and must not be used with a production database.
+
 The API is exported as the `expressApi` Firebase function. A scheduled `updateEngagementScores` function refreshes trending rankings every six hours.
 
 ## Primary v1 endpoints

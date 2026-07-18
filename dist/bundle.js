@@ -221906,7 +221906,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   CollectionItem: () => (/* binding */ CollectionItem)
 /* harmony export */ });
-/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! mongoose */ "./node_modules/mongoose/index.js?61c7");
+/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! mongoose */ "./node_modules/mongoose/index.js?7d8a");
 
 var CollectionItemSchema = new mongoose__WEBPACK_IMPORTED_MODULE_0__.Schema({
   collection: {
@@ -221927,7 +221927,8 @@ var CollectionItemSchema = new mongoose__WEBPACK_IMPORTED_MODULE_0__.Schema({
     required: true
   }
 }, {
-  timestamps: true
+  timestamps: true,
+  suppressReservedKeysWarning: true
 });
 CollectionItemSchema.index({
   collection: 1,
@@ -222266,7 +222267,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   User: () => (/* binding */ User)
 /* harmony export */ });
-/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! mongoose */ "./node_modules/mongoose/index.js?61c7");
+/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! mongoose */ "./node_modules/mongoose/index.js?7d8a");
 /* harmony import */ var _utils_auth_utils_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utils/auth.utils.js */ "./src/utils/auth.utils.js");
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
@@ -222404,35 +222405,12 @@ userSchema.virtual('initials').get(function () {
   var _this$firstName, _this$lastName;
   return "".concat(((_this$firstName = this.firstName) === null || _this$firstName === void 0 ? void 0 : _this$firstName[0]) || '').concat(((_this$lastName = this.lastName) === null || _this$lastName === void 0 ? void 0 : _this$lastName[0]) || '');
 });
-userSchema.pre('save', /*#__PURE__*/function () {
-  var _ref = _asyncToGenerator(function* (next) {
-    if (!this.isModified('password')) return next();
-    var hashedPassword = yield (0,_utils_auth_utils_js__WEBPACK_IMPORTED_MODULE_1__.hashPassword)(this.password);
-    this.password = hashedPassword;
-    next();
-  });
-  return function (_x) {
-    return _ref.apply(this, arguments);
-  };
-}());
-userSchema.statics.exists = /*#__PURE__*/function () {
-  var _ref2 = _asyncToGenerator(function* (id) {
-    try {
-      var user = yield this.findOne({
-        _id: id
-      });
-      if (user) throw new Error('User already exists');
-      return user;
-    } catch (error) {
-      throw error;
-    }
-  });
-  return function (_x2) {
-    return _ref2.apply(this, arguments);
-  };
-}();
+userSchema.pre('save', /*#__PURE__*/_asyncToGenerator(function* () {
+  if (!this.isModified('password')) return;
+  this.password = yield (0,_utils_auth_utils_js__WEBPACK_IMPORTED_MODULE_1__.hashPassword)(this.password);
+}));
 userSchema.statics.findByEmail = /*#__PURE__*/function () {
-  var _ref3 = _asyncToGenerator(function* (email) {
+  var _ref2 = _asyncToGenerator(function* (email) {
     try {
       var user = yield this.findOne({
         email
@@ -222443,8 +222421,8 @@ userSchema.statics.findByEmail = /*#__PURE__*/function () {
       throw error;
     }
   });
-  return function (_x3) {
-    return _ref3.apply(this, arguments);
+  return function (_x) {
+    return _ref2.apply(this, arguments);
   };
 }();
 userSchema.index({

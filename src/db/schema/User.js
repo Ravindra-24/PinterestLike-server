@@ -105,22 +105,10 @@ userSchema.virtual('initials').get(function(){
     return `${this.firstName?.[0] || ''}${this.lastName?.[0] || ''}`
 })
 
-userSchema.pre('save',async function(next){
-    if(!this.isModified('password')) return next();
-    const hashedPassword =await hashPassword(this.password)
-    this.password = hashedPassword
-    next()
+userSchema.pre('save', async function(){
+    if(!this.isModified('password')) return;
+    this.password = await hashPassword(this.password)
 })
-
-userSchema.statics.exists = async function(id){
-    try {
-        const user = await this.findOne({_id:id})
-    if(user) throw new Error('User already exists')
-    return user
-    } catch (error) {
-        throw error
-    }
-}
 
 userSchema.statics.findByEmail = async function(email){
     try {
