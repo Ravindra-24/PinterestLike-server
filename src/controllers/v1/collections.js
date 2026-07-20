@@ -55,7 +55,7 @@ export const addItem = async (req, res) => {
     collection.itemCount += 1;
     if (!collection.coverPost) collection.coverPost = post._id;
     await collection.save();
-    post.saveCount += 1;
+    post.saveCount = Number(post.saveCount || 0) + 1;
     await post.save();
     if (String(post.user) !== String(req.user.id)) await Notification.create({ recipient: post.user, actor: req.user.id, type: "save", entityType: "post", entityId: post._id }).catch(() => undefined);
   }
@@ -68,8 +68,12 @@ export const removeItem = async (req, res) => {
   const result = await CollectionItem.deleteOne({ collection: collection._id, post: req.params.postId });
   if (result.deletedCount) {
     collection.itemCount = Math.max(0, collection.itemCount - 1);
+    if (String(collection.coverPost) === String(req.params.postId)) {
+      const nextItem = await CollectionItem.findOne({ collection: collection._id }).sort({ createdAt: -1 }).select("post").lean();
+      collection.coverPost = nextItem?.post || null;
+    }
     await collection.save();
-    await Post.updateOne({ _id: req.params.postId }, { $inc: { saveCount: -1 } });
+    await Post.updateOne({ _id: req.params.postId, saveCount: { $gt: 0 } }, { $inc: { saveCount: -1 } });
   }
   return ok(res, { removed: Boolean(result.deletedCount) });
 };
